@@ -36,24 +36,24 @@ class MailGunAPI(object):
         :param message: Message instance.
         :param envelope_from: Email address to be used in MAIL FROM command.
         """
-        mesage_data = {'from': envelope_from or message.sender,
+        message_data = {'from': envelope_from or message.sender,
                        'to': message.send_to,
                        'subject': message.subject,
                        "cc": message.cc,
                        "bcc": message.bcc,
                        'text': message.body,
                        'html': message.html}
-        mesage_data = {k: v for k, v in mesage_data.items() if v is not None}
+        message_data = {k: v for k, v in message_data.items() if v is not None}
 
         files = [(a.disposition, (a.filename, a.data))
                  for a in message.attachments]
 
-        responce = requests.post(self.sendpoint,
+        response = requests.post(self.sendpoint,
                                  auth=self.auth,
-                                 data=mesage_data,
+                                 data=message_data,
                                  files=files)
-        responce.raise_for_status()
-        return responce
+        response.raise_for_status()
+        return response
 
     def send_message(self, *args, **kwargs):
         """Shortcut for send(msg).
@@ -125,7 +125,7 @@ class MailGunAPI(object):
         routes = self.list_routes()
         if routes:
             id_table = dict((make_key(r), r["id"]) for r in routes)
-            return id_table.get(make_key(route)) 
+            return id_table.get(make_key(route))
         else:
             return None
 
