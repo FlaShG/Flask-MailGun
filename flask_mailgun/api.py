@@ -37,6 +37,7 @@ class MailGunAPI(object):
         :param envelope_from: Email address to be used in MAIL FROM command.
         """
         message_data = {'from': envelope_from or message.sender,
+                       'sender': message.sender,
                        'to': message.send_to,
                        'subject': message.subject,
                        "cc": message.cc,
